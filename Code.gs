@@ -1,5 +1,14 @@
 function TsJournalTrello() {
-  
+  // Description: Function automates the process of copying the Trello 
+  //              Card Name to the,
+  //              1) Journal, creating a 'Heading 2' format text with a 
+  //              Hyperlink to the Trello card.    
+  //              2) The Timesheet Spreadsheet creating a hyperlink in the 'O2' 
+  //              column. The Timesheet Spreadsheet link is taken from the organisation name found in the 
+  //              organisation spreadsheet.
+  // 
+  // Author: Debbie Thomas
+  // Date: 4th October 2019
   //To do Check if the document link already exists.
   
   //Config
