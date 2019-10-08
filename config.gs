@@ -1,0 +1,3 @@
+//Config
+
+var SUCCESS = true
