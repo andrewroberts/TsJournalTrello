@@ -14,20 +14,9 @@
 // the way through, even if you don't want it. So I usually add a "return" 
 // after the function name until the auth flow is finished.
 
-//AJR - One feature I will use now is these, so we can practice tracking versions:
-//
-// We can call the latest code you pushed "v0.1". I've created a new branch for that.
-// Note how this version that I'm not working on is a branch off v0.1 so I've added 
-// the "dev_ajr" suffix and this is the name of the branch I'll do my daily pushes to 
-// until it is ready to be released to either v0.2 or v1.0.
-
-//TODO: Change code to look for heading 1 and change next line to heading 2 and add URL
-//TODO: Find TrelloCardName URL from TrelloBoardUrl
-
 var SCRIPT_NAME = "TsJournalTrello"
 var SCRIPT_VERSION = "v0.1.dev_dlt"
 
-//AJR Capital first letters indicate a service or constructor, so this would be tsJournalTrello()
 
 //AJR We use something called JSDoc to automatically create docs from the code and these dictate 
 // the format of the function headers, so along with my standard format:
@@ -41,9 +30,8 @@ var SCRIPT_VERSION = "v0.1.dev_dlt"
  * Function automates the process of copying the Trello Card Name to the,
  * 1) Journal, creating a 'Heading 2' format text with a 
  * Hyperlink to the Trello card.    
- * 2) The Timesheet Spreadsheet creating a hyperlink in the 'O2' 
- * column. The Timesheet Spreadsheet link is taken from the organisation name found in the 
- * organisation spreadsheet.
+ * 2) The Timesheet Spreadsheet creating a hyperlink to the journal in the Task/Notes 
+ * column. 
  *
  * @param {object} none
  *
@@ -51,16 +39,7 @@ var SCRIPT_VERSION = "v0.1.dev_dlt"
  */
 
 function tsJournalTrello(DocId) {
-  // Description: Function automates the process of copying the Trello 
-  //              Card Name to the,
-  //              1) Journal, creating a 'Heading 2' format text with a 
-  //              Hyperlink to the Trello card.    
-  //              2) The Timesheet Spreadsheet creating a hyperlink in the 'O2' 
-  //              column. The Timesheet Spreadsheet link is taken from the organisation name found in the 
-  //              organisation spreadsheet.
-  // 
-  // Author: Debbie Thomas
-  // Date: 4th October 2019
+
   
   //Open the organisation spreadsheet
   var orgData = SpreadsheetApp.openById(ORG_ID_)
@@ -134,10 +113,15 @@ function tsJournalTrello(DocId) {
       var nptext = np.getText()
       Logger.log(nptext)
       np.setHeading(DocumentApp.ParagraphHeading.HEADING2)
-      np.setLinkUrl(trelloBoardUrl)
-      
+
       //Store the text as the Trello Card Title
       var TrelloCardTitle = nptext
+      
+      //Get the Url from the card title, add the link to the journal
+      // TODO: Get the lists of cards from the board ID and find the URL of the Card from TrelloCardTitle
+      var trelloCardUrl = getTrelloCardUrl(TrelloCardTitle)
+      np.setLinkUrl(trelloCardUrl)
+      
     }
   }
   
@@ -151,8 +135,7 @@ function tsJournalTrello(DocId) {
     
   Logger.log(lastTsRow)
   
-  // TODO: Get the lists of cards from the board ID and find the URL of the Card from TrelloCardTitle
-    var trelloBoardList = test_getBoardLists(trelloBoardId)
+
    //Find the card name from the Board List
   
     //Open timesheet and add the Hyperlink to Journal
@@ -170,54 +153,24 @@ function tsJournalTrello(DocId) {
 return SUCCESS
 }
 
-function test_getBoardLists(trelloBoardId) {
-
-  try {
-
-     var trelloApp = new TrelloApp.App({
-       version: 'v0.2.3',
-       log: Log,
-       })
-    //var trelloApp = new TrelloApp.App()    
-    var boards = trelloApp.getBoardLists(trelloBoardId)
-    Logger.log(boards)
+function getTrelloCardUrl(TrelloCardTitle) {
   
-  } catch (error) {
-
-    if (error.name === 'AuthorizationError') {
-    
-      // This is a special error thrown by TrelloApp to indicate
-      // that user authorization is required    
-      showAuthorisationDialog()
-      
-    } else {
-    
-      throw error
-    }
+  var API_KEY = PropertiesService.getScriptProperties().getProperty("API_KEY")
+  var TOKEN = PropertiesService.getScriptProperties().getProperty("TOKEN")
+  var url = "https://api.trello.com/1/boards/5d91c934ef30f98eee00a4d2/cards/?fields=name,url&key=" + API_KEY + "&token=" + TOKEN
+  var response = UrlFetchApp.fetch(url).getContentText()
+  
+  var cardUrl = null
+  var obj = JSON.parse(response)
+        
+  for (x in obj) {
+    if (obj[x].name === TrelloCardTitle) {
+      cardUrl = obj[x].url
+      Logger.log(cardUrl)
+      return cardUrl
+    } 
   }
-  
-  return boards
-  
-  // Private Functions
-  // -----------------
-  
-  function showAuthorisationDialog() {
-      
-    var authorizationUrl = trelloApp.getAuthorizationUri()
-    
-    Dialog.show(
-      'Opening authorization window...', 
-        'Follow the instructions in this window, close ' + 
-        'it and then try the action again. ' + 
-        '<br/><br/>Look out for a warning that ' + 
-        'your browser has blocked the authorisation pop-up from Trello. ' + 
-        '<script>window.open("' + authorizationUrl + '")</script>',
-      160)
-      
-  } // showAuthorisationDialog()
-    
-} // test_createCard()
 
-function reset() {
-  new TrelloApp.App().reset()
+  return
+  
 }
