@@ -53,6 +53,9 @@ var ORG_TS_COL_ = 17
 var TIMESHEET_COL_ = 15
 var TRELLO_COL_ = 21
 var DATE_COL_ = "A1:A"
+
+var START_URL_INDEX_ = 21
+var END_URL_INDEX_ = 29
   
 // Function Template
 // -----------------
