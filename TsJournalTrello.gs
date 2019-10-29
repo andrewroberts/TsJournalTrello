@@ -293,7 +293,7 @@ function processTimesheet_(timesheetUrl, npBookmarkId, DocUrl, trelloCardTitle) 
       var cellValue = timesheetTask.getValue()
       if (cellValue !== '') {
       
-        Logger.log('Data found in Timesheet Notes, clear the Task/Notes cell and try again')
+        Log_.warning('Data found in Timesheet Notes, clear the Task/Notes cell and try again')
         return 
       } else {
       
