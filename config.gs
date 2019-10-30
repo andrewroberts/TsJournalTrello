@@ -52,7 +52,7 @@ var ORG_TS_COL_ = 17
 // Timesheet 
 var TIMESHEET_COL_ = 15
 var TRELLO_COL_ = 21
-var DATE_COL_ = "A1:A"
+var DATE_COL_ = "A2:A"
 
 var START_URL_INDEX_ = 21
 var END_URL_INDEX_ = 29
