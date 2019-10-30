@@ -13,9 +13,6 @@
 //
 // This files contains all of the event handlers, plus miscellaneous functions 
 // not worthy of their own files yet
-//
-// The filename is prepended with _API as the Github chrome extension won't 
-// push a file with the same name as the project.
 
 var Log_
 var Properties_
