@@ -220,7 +220,7 @@ function linkHeaders_(DocId) {
 function processJournal_(journal, trelloBoardId) {
           
   var paragraphs = journal.getBody().getParagraphs()
-  var ProcessJournalReturn = null
+  var processJournalReturn = null
   var Heading1Paragraphs = []
   
   for(var i in paragraphs) { 
