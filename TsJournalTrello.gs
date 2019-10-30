@@ -83,27 +83,27 @@ function eventHandler_(config, args) {
     
   } catch (error) {
 
-  var handleError = Assert.HandleError.DISPLAY_FULL
+    var handleError = Assert.HandleError.DISPLAY_FULL
 
-  if (!PRODUCTION_VERSION_) {
-    handleError = Assert.HandleError.THROW
-  }
+    if (!PRODUCTION_VERSION_) {
+      handleError = Assert.HandleError.THROW
+    }
 
-  var assertConfig = {
-    error:          error,
-    userMessage:    config[1],
-    log:            Log_,
-    handleError:    handleError, 
-    sendErrorEmail: SEND_ERROR_EMAIL_, 
-    emailAddress:   ADMIN_EMAIL_ADDRESS_,
-    scriptName:     SCRIPT_NAME,
-    scriptVersion:  SCRIPT_VERSION,
+    var assertConfig = {
+      error:          error,
+      userMessage:    config[1],
+      log:            Log_,
+      handleError:    handleError, 
+      sendErrorEmail: SEND_ERROR_EMAIL_, 
+      emailAddress:   ADMIN_EMAIL_ADDRESS_,
+      scriptName:     SCRIPT_NAME,
+      scriptVersion:  SCRIPT_VERSION,
     }
 
     Assert.handleError(assertConfig)
-    }
+  }
     
-    } // eventHandler_()
+} // eventHandler_()
 
 // Private event handlers
 // ----------------------
@@ -112,7 +112,7 @@ function eventHandler_(config, args) {
  *
  *
  * @param {object} 
- *
+s *
  * @return {object}
  */
  
@@ -140,13 +140,13 @@ function linkHeaders_(DocId) {
   orgFound = data.some(function(row)  {
       
     //check if the company name matches the orgName
-    var orgNameSearch = row[ORG_NAME_COL_]
+    var orgNameSearch = row[ORG_NAME_COL_INDEX_]
       
     if (orgNameSearch === orgName) {
     
       //Get the timesheet and Trello Board Url
-      timesheetUrl = row[ORG_TS_COL_]
-      trelloBoardUrl = row[TRELLO_COL_]
+      timesheetUrl = row[ORG_TS_COL_INDEX_]
+      trelloBoardUrl = row[ORG_TRELLO_COL_INDEX_]
       return true
       
       }
@@ -158,35 +158,26 @@ function linkHeaders_(DocId) {
     Log_.warning('Organisation Name: ' + orgName + ' not found in Org Spreadsheet')
     return
       
-  if (!orgFound) {
-    Log_.warning('Organisation Name: ' + orgName + ' not found in Org Spreadsheet')
-    return
   }
- Log_.info('Organisation Name: ' + orgName + ' found in Org Spreadsheet')
     
-    Log_.info('Organisation Name: ' + orgName + ' found in Org Spreadsheet')
-      
-  }
-   
-    
+  Log_.info('Organisation Name: ' + orgName + ' found in Org Spreadsheet')
+        
   //Check the Trello Board Exists  
-  if (trelloBoardUrl === null) {
+  if (trelloBoardUrl === null || trelloBoardUrl === '') {
     
     Log_.warning('No Trello Board URL found in Org Spreadsheet')
     return
       
-  } else {
+  }
       
-    //Get the Trello Board Id from the wedsite json return  
-    trelloBoardId = getTrelloBoardId_(trelloBoardUrl)
+  //Get the Trello Board Id from the wedsite json return  
+  trelloBoardId = getTrelloBoardId_(trelloBoardUrl)
     
-    if (trelloBoardId === null) {
-      Log_.warning('No new trello board Id found for ' + trelloBoardUrl)
-      return
-    }    
-    Log_.info('Trello Card Id: ' + trelloBoardId)
-        
-  } //if (trelloBoardUrl === '')
+  if (trelloBoardId === null) {
+    Log_.warning('No new trello board Id found for ' + trelloBoardUrl)
+    return
+  }    
+  Log_.info('Trello Card Id: ' + trelloBoardId)
       
   //Open the Journal, loop through the paragraphs until the Heading 1 is found
   //The next paragraph is the Trello Card Name, check it hasnt already been processed.
@@ -200,21 +191,20 @@ function linkHeaders_(DocId) {
     Log_.warning('Invalid Journal ID ' + DocId)
    
     return
-  } else {
+  }
    
-    //Process the journal, find the next tello card task, hyperlink the heading
-    var [trelloCardTitle, npBookmarkId] = processJournal_(journal, trelloBoardId)
+  //Process the journal, find the next tello card task, hyperlink the heading
+  var [trelloCardTitle, npBookmarkId] = processJournal_(journal, trelloBoardId)
           
-    if (trelloCardTitle == null) {
-      Log_.warning('Either no trello card title found or trello card found on trello board')
-      return
-    } else if (npBookmarkId == null) {
-      Log_.warning('No Bookmark Found')    
-      return
-    } else {
-      //Add the link to the timesheet
-      processTimesheet_(timesheetUrl, npBookmarkId, docUrl, trelloCardTitle)    
-    }
+  if (trelloCardTitle == null) {
+    Log_.warning('Either no trello card title found or trello card found on trello board')
+    return
+  } else if (npBookmarkId == null) {
+    Log_.warning('No Bookmark Found')    
+    return
+  } else {
+    //Add the link to the timesheet
+    processTimesheet_(timesheetUrl, npBookmarkId, docUrl, trelloCardTitle)    
   }
                 
   return SUCCESS  
@@ -225,41 +215,42 @@ function processJournal_(journal, trelloBoardId) {
           
   var paragraphs = journal.getBody().getParagraphs()
   var processJournalReturn = null
-  var heading1Paragraphs = []
+  var Heading1Paragraphs = []
   
- paragraphs.forEach(function(paragraph, paragraphIndex) {
-   if (paragraph.getHeading() === DocumentApp.ParagraphHeading.HEADING1) {
-     Heading1Paragraphs.push(paragraphIndex)
-   } 
- }) 
-    if (paragraphs[i].getHeading() === DocumentApp.ParagraphHeading.HEADING1) {
-      Heading1Paragraphs.push(i)
+  paragraphs.forEach(function(paragraph, paragraphIndex) {
+    if (paragraph.getHeading() === DocumentApp.ParagraphHeading.HEADING1) {
+      Heading1Paragraphs.push(paragraphIndex)
     }
-  }
+  })
+      
+//  for(var i in paragraphs) { 
+//    if (paragraphs[i].getHeading() === DocumentApp.ParagraphHeading.HEADING1) {
+//      Heading1Paragraphs.push(i)
+//    }
+//  }
   
   var lastHeading1Paragraph = Heading1Paragraphs[Heading1Paragraphs.length -1]
-  var trelloCardParagraph = paragraphs[Number(lastHeading1Paragraph) + 1]
+  var trelloCardParagraph = paragraphs[parseInt(lastHeading1Paragraph) + 1]
   var trelloCardTitle = trelloCardParagraph.getText()
   
   if (trelloCardParagraph.getHeading() !== DocumentApp.ParagraphHeading.HEADING2) {
     var trelloCardUrl = getTrelloCardUrl_(trelloBoardId, trelloCardTitle)
     
-      if (trelloCardUrl === null) {
+    if (trelloCardUrl === null) {
   
-        Log_.warning('Card Name ' + trelloCardTitle + ' not found in list of Trello Boards')
-        return [null, null]
-      } else {
+      Log_.warning('Card Name ' + trelloCardTitle + ' not found in list of Trello Boards')
+      return [null, null]
+    }
   
-        var sectionPos = journal.newPosition(trelloCardParagraph, 0);
-        var npBookmark = journal.addBookmark(sectionPos)
+    var sectionPos = journal.newPosition(trelloCardParagraph, 0);
+    var npBookmark = journal.addBookmark(sectionPos)
         
-        // Set the next paragraph to heading 2 and add the Trello Card Title URL link
-        trelloCardParagraph.setHeading(DocumentApp.ParagraphHeading.HEADING2)
-        trelloCardParagraph.setLinkUrl(trelloCardUrl)
+    // Set the next paragraph to heading 2 and add the Trello Card Title URL link
+    trelloCardParagraph.setHeading(DocumentApp.ParagraphHeading.HEADING2)
+    trelloCardParagraph.setLinkUrl(trelloCardUrl)
       
-        processJournalReturn = [trelloCardTitle, npBookmark.getId()]
-        return processJournalReturn 
-     }
+    processJournalReturn = [trelloCardTitle, npBookmark.getId()]
+    return processJournalReturn 
   } else {
     Log_.warning('Trello Card Title already processed')
     return [null, null]
@@ -273,46 +264,43 @@ function processTimesheet_(timesheetUrl, npBookmarkId, docUrl, trelloCardTitle) 
 
     Log_.warning('No Timesheet URL found in Org Spreadsheet')
     return
+  } else if (npBookmarkId === null) {
     
-  } else {
-    //Get the last row with data in the Date column, use this to add the Trello Card and 
-    //Journal URL link to the timesheet
-    var timeSheet = SpreadsheetApp.openByUrl(timesheetUrl).getSheetByName('Timesheet')
-    var tsDate = timeSheet.getRange(DATE_COL_).getValues()
-    var lastTsRow = tsDate.filter(String).length 
-    
-    //Get the last timesheet row and add the link to the journal heading
-    var timesheetTask = timeSheet.getRange(lastTsRow, TIMESHEET_COL_)
-    
-    if (npBookmarkId === null) {
-    
-      Log_.warning('No Bookmark URL found Journal' + docUrl + ' or no new journal entry')
-      return
-    } else if ( docUrl === null) {
+    Log_.warning('No Bookmark URL found Journal' + docUrl + ' or no new journal entry')
+    return
+  } else if ( docUrl === null) {
   
-      Log_.warning('No Journal URL found')
-      return
-    } else if (trelloCardTitle === null) {
+    Log_.warning('No Journal URL found')
+    return
+  } else if (trelloCardTitle === null) {
   
-      Log_.warning('No Trello Card Title URL found for ' + docUrl)
-      return  
-    } else {
-    
-      var cellValue = timesheetTask.getValue()
-      if (cellValue !== '') {
-      
-        Log_.warning('Data found in Timesheet Notes, clear the Task/Notes cell and try again')
-        return 
-      } else {
-      
-        timesheetTask.setFormula('=HYPERLINK("' + docUrl + '#bookmark=' + npBookmarkId + '", " ' + trelloCardTitle + '")')
-      
-      }
-      
-      Log_.info('Timesheet URL: ' + timesheetUrl)
-      Log_.info('Journal URL: ' + docUrl +  npBookmarkId)
-    }
+    Log_.warning('No Trello Card Title URL found for ' + docUrl)
+    return  
   }
+    
+  //Get the last row with data in the Date column, use this to add the Trello Card and 
+  //Journal URL link to the timesheet
+  var timeSheet = SpreadsheetApp.openByUrl(timesheetUrl).getSheetByName('Timesheet')
+  var tsDate = timeSheet.getRange(DATE_COL_NUMBER_).getValues()
+  var lastTsRow = tsDate.filter(String).length 
+   
+  //Get the last timesheet row and add the link to the journal heading
+  var timesheetTask = timeSheet.getRange(lastTsRow, TIMESHEET_COL_NUMBER_)
+      
+  var cellValue = timesheetTask.getValue()
+  if (cellValue !== '') {
+      
+    Log_.warning('Data found in Timesheet Notes, clear the Task/Notes cell and try again')
+    return 
+  } else {
+      
+    timesheetTask.setFormula('=HYPERLINK("' + docUrl + '#bookmark=' + npBookmarkId + '", " ' + trelloCardTitle + '")')
+      
+  }
+      
+  Log_.info('Timesheet URL: ' + timesheetUrl)
+  Log_.info('Journal URL: ' + docUrl +  npBookmarkId)
+    
 }
 
 function getTrelloCardUrl_(trelloBoardId, trelloCardTitle) {
@@ -362,8 +350,7 @@ function getTrelloBoardId_(trelloBoardUrl) {
     Log_.warning('Trello Board Id ' + trelloBoardUrl + ' not found')
     
     return null    
-  } else {
+  }
   
-    return trelloBoardId     
-  }        
+  return trelloBoardId         
 }

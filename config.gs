@@ -45,14 +45,14 @@ var ADMIN_EMAIL_ADDRESS_ = 'debbiethomas35@gmail.com'
 var SUCCESS = true
 
 //Organisation Spreadsheet
-var ORG_NAME_COL_ = 1
+var ORG_NAME_COL_INDEX_ = 1
 var ORG_ID_ = '1IwctVagVOgmlmGbJt0atVQPkyTp_ZKocoRkuQa4cEtU'
-var ORG_TS_COL_ = 17
+var ORG_TS_COL_INDEX_ = 17
+var ORG_TRELLO_COL_INDEX_ = 21
   
 // Timesheet 
-var TIMESHEET_COL_ = 15
-var TRELLO_COL_ = 21
-var DATE_COL_ = "A2:A"
+var TIMESHEET_COL_NUMBER_ = 15
+var DATE_COL_NUMBER_ = "A1:A"
 
 var START_URL_INDEX_ = 21
 var END_URL_INDEX_ = 29
