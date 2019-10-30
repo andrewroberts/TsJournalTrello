@@ -223,7 +223,11 @@ function processJournal_(journal, trelloBoardId) {
   var processJournalReturn = null
   var heading1Paragraphs = []
   
-  for(var i in paragraphs) { 
+ paragraphs.forEach(function(paragraph, paragraphIndex) {
+   if (paragraph.getHeading() === DocumentApp.ParagraphHeading.HEADING1) {
+     Heading1Paragraphs.push(paragraphIndex)
+   } 
+ }) 
     if (paragraphs[i].getHeading() === DocumentApp.ParagraphHeading.HEADING1) {
       Heading1Paragraphs.push(i)
     }
