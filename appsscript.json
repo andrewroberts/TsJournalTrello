@@ -1,0 +1,17 @@
+{
+  "timeZone": "Europe/London",
+  "dependencies": {
+    "libraries": [{
+      "userSymbol": "BBLog",
+      "libraryId": "1kzzYZhgODZluRmjsjh7t3O-ftmFAF9h1jaRHU0rOdf9irF0VUiJW33Kt",
+      "version": "13",
+      "developmentMode": true
+    }, {
+      "userSymbol": "Assert",
+      "libraryId": "1R-rxUHuQU0ez95FlZz9fxqifbYFszHnukqzv_3Uk5zM3eG4eRBrh_E1M",
+      "version": "16",
+      "developmentMode": true
+    }]
+  },
+  "exceptionLogging": "STACKDRIVER"
+}
