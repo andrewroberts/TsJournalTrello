@@ -214,7 +214,7 @@ function linkHeaders_(DocId) {
   }
                 
   return SUCCESS  
-}// linkHeaders() 
+}// linkHeaders_() 
 
 
 function processJournal_(journal, trelloBoardId) {
