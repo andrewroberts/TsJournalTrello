@@ -166,7 +166,7 @@ function linkHeaders_(DocId) {
    
     
   //Check the Trello Board Exists  
-  if (trelloBoardUrl === '') {
+  if (trelloBoardUrl === null) {
     
     Log_.warning('No Trello Board URL found in Org Spreadsheet')
     return
