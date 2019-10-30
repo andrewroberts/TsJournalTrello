@@ -158,7 +158,11 @@ function linkHeaders_(DocId) {
     Log_.warning('Organisation Name: ' + orgName + ' not found in Org Spreadsheet')
     return
       
-  } else {
+  if (!orgFound) {
+    Log_.warning('Organisation Name: ' + orgName + ' not found in Org Spreadsheet')
+    return
+  }
+ Log_.info('Organisation Name: ' + orgName + ' found in Org Spreadsheet')
     
     Log_.info('Organisation Name: ' + orgName + ' found in Org Spreadsheet')
       
