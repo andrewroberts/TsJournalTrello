@@ -176,7 +176,7 @@ function linkHeaders_(DocId) {
     //Get the Trello Board Id from the wedsite json return  
     trelloBoardId = getTrelloBoardId_(trelloBoardUrl)
     
-    if (trelloBoardId == null) {
+    if (trelloBoardId === null) {
       Log_.warning('No new trello board Id found for ' + trelloBoardUrl)
       return
     }    
