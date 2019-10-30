@@ -188,7 +188,7 @@ function linkHeaders_(DocId) {
   //The next paragraph is the Trello Card Name, check it hasnt already been processed.
   //If it hasnt, change the style to Heading 2 and add a Hyperlink to the Trello Card 
   var journal = DocumentApp.openById(DocId)
-  var DocUrl = journal.getUrl()
+  var docUrl = journal.getUrl() // plus all subsequent "docUrl"s
   var npBookmark = null
  
   if (journal === null) { 
