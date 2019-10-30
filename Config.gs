@@ -1,6 +1,6 @@
   // 34567890123456789012345678901234567890123456789012345678901234567890123456789
 
-// JSHint - TODO
+// JSHint - 30Oct2019
 /* jshint asi: true */
 
 (function() {"use strict"})()
@@ -21,42 +21,44 @@
 // Configuration
 // =============
 
-var SCRIPT_NAME = "tsJournalTrello"
-var SCRIPT_VERSION = "v0.2"
+var SCRIPT_NAME = "TsJournalTrello"
+var SCRIPT_VERSION = "v1.0"
 
-var PRODUCTION_VERSION_ = false
+var PRODUCTION_VERSION_ = true
 
 // Log Library
 // -----------
 
 var DEBUG_LOG_LEVEL_ = PRODUCTION_VERSION_ ? BBLog.Level.INFO : BBLog.Level.FINER
 var DEBUG_LOG_DISPLAY_FUNCTION_NAMES_ = PRODUCTION_VERSION_ ? BBLog.DisplayFunctionNames.NO : BBLog.DisplayFunctionNames.NO
+var DEBUG_LOG_SHEET_ID_ = '1WADNOsJwZdTqAV0a_N4yotTzJdgVIr4Zv7OoSP74BaM'
 
 // Assert library
 // --------------
 
 var SEND_ERROR_EMAIL_ = PRODUCTION_VERSION_ ? true : false
 var HANDLE_ERROR_ = Assert.HandleError.THROW
-var ADMIN_EMAIL_ADDRESS_ = 'debbiethomas35@gmail.com'
+
+// Tests
+// -----
+
+var TEST_DOC_ID_ = '1Q-_uIu6S80Xm-Q_Do8N0i1BGtB6kNzIm4LR_8niWIfA' // ChCS - Journal
 
 // Constants/Enums
 // ===============
 
-var SUCCESS = true
-
-//Organisation Spreadsheet
-var ORG_NAME_COL_INDEX_ = 1
-var ORG_ID_ = '1IwctVagVOgmlmGbJt0atVQPkyTp_ZKocoRkuQa4cEtU'
-var ORG_TS_COL_INDEX_ = 17
-var ORG_TRELLO_COL_INDEX_ = 21
-  
-// Timesheet 
-var TIMESHEET_COL_NUMBER_ = 15
-var DATE_COL_NUMBER_ = "A1:A"
-
 var START_URL_INDEX_ = 21
 var END_URL_INDEX_ = 29
   
+// Organisation Spreadsheet
+var ORG_NAME_COLUMN_INDEX_ = 1
+var ORG_TIMESHEET_COLUMN_INDEX_ = 18
+var ORG_TRELLO_COLUMN_INDEX_ = 22
+  
+// Timesheet 
+var TIMESHEET_NOTES_COLUMN_NUMBER_ = 15
+var TIMESHEET_DATE_COLUMN_RANGE_ = "A1:A"
+
 // Function Template
 // -----------------
 
@@ -67,7 +69,7 @@ var END_URL_INDEX_ = 29
  *
  * @return {Object}
  */
- 
+/* 
 function functionTemplate() {
 
   Log_.functionEntryPoint()
@@ -75,4 +77,4 @@ function functionTemplate() {
   
 
 } // functionTemplate() 
-  
+*/  
