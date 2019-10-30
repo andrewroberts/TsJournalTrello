@@ -193,7 +193,7 @@ function linkHeaders_(DocId) {
  
   if (journal === null) { 
   
-    Log_.warning('Invalid Journal ID' + DocId)
+    Log_.warning('Invalid Journal ID ' + DocId)
    
     return
   } else {
